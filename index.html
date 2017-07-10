@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="full-screen" content="yes">
+    <meta name="x5-fullscreen" content="true">
+    <title>确认函</title>
+    <script src="flexible.js"></script>
+    <style type="text/css">
+        *{
+            margin:0;padding:0;font-size:0.4rem;
+        }
+        input[type="button"]{
+            -webkit-appearance: none;
+            outline:none;
+            margin-left:1.6rem;
+            border:1px solid #3e78c0;
+            border-radius: 0.0533rem;
+            width: 2rem;
+            height: 0.88rem;
+            background: #e76e6f;
+            box-shadow:-0.0667rem 0 0 0 rgba(231, 110, 111, 0.15);
+            color:#fff;
+        }
+        .confirmation{
+           padding:1rem 0.5rem 0;
+            background:#5695e2;
+        }
+        .confirmation .signature{
+            position: relative;
+            margin:1rem 0;
+            width: 100%;
+            height: 6.04rem;
+            background: #fff;
+            color:#000;
+        }
+        .confirmation .signatureS{
+            position: absolute;
+            top:45%;
+            left:38%;
+            color:#bbb;
+        }
+    </style>
+</head>
+<body class="confirmation">
+      <div class="signature" id="signature">
+          <p class="signatureS">手&nbsp写&nbsp签&nbsp名</p>
+      </div>
+      <input type="button" value="重写" class="signReset" >
+      <input type="button" value="提交" class="sure" id="btnSubmit">
+      <div class="signature" id="image"></div>
+</body>
+<script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.js"></script>
+<script src="jSignature.min.js"></script>
+<script src="jSignature.UndoButton.js"></script>
+<script type="text/javascript">
+    $(document).ready(function() {
+        var $signature = $("#signature");
+        $signature.jSignature({
+            width: '100%',
+            height: "100%",
+            'background-color': 'transparent',
+            'UndoButton':true   // 'UndoButton':true   撤销功能初始化，此功能需要引入jSignature.UndoButton.js
+            //关于撤销按钮的样式，可以在jSignature.UndoButton.js中117和116行直接修改input标签或样式
+        }).on("change",function(){
+            $(".signatureS").hide();
+        });
+//         API1 $signature.jSignature(); init 初始化
+        ///////////////////////
+        $(".signReset").on("click",function(){
+            $signature.jSignature("reset");
+            $(".signatureS").show();
+        });
+        //       API2 reset 重置
+        /////////////////////////////
+        $("#btnSubmit").on("click",function(){
+            var data =  $signature.jSignature("getData","svgbase64");
+            //API3  getData 获取数据
+             var image=new Image();
+             image.src="data:"+data[0]+","+data[1];
+             $("#image").html(image);
+        });
+    })
+</script>
+</html>
